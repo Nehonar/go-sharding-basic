@@ -339,4 +339,3 @@ Hash Mod N is chosen **deliberately** as a simple, clear, educational approach t
 - system layering  
 - database distribution  
 
-Future projects in this portfolio will explore more advanced strategies such as **consistent hashing** and **virtual nodes**.

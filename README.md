@@ -1,94 +1,97 @@
 # go-sharding-basic
 
-Sistema de ejemplo en Go que implementa sharding básico usando `hash(username) % N` para distribuir usuarios entre múltiples shards de PostgreSQL.
+Example system in Go that implements basic sharding using `hash(username) % N` to distribute users across multiple PostgreSQL shards.
 
-Este proyecto demuestra:
+This project showcases:
 
-- Separación clara en capas (API, Handler, Service, Router, Storage, Shards)
-- Diseño limpio y mantenible
-- Enrutamiento determinístico de escritura y lectura
-- Sharding real en múltiples bases de datos PostgreSQL
-- Arquitectura pensada para escalar horizontalmente
-- Uso correcto de Go modules, interfaces y dependencias
-
----
-
-## Arquitectura general
-
-Flujo principal (CreateUser / GetUser):
-
-Cliente → Handler → Service → Router → Shard → Base de datos
-
-Cada capa tiene una responsabilidad única:
-
-- **Handler**: HTTP (JSON ↔ dominio)
-- **Service**: lógica de negocio
-- **Router**: elige el shard correcto
-- **Shard**: ejecuta SQL
-- **Database**: almacena datos
-- **Models**: estructuras de datos puras
+- Clear separation of layers (API, Handler, Service, Router, Storage, Shards)
+- Clean and maintainable design
+- Deterministic routing for reads and writes
+- Real sharding across multiple PostgreSQL databases
+- Architecture designed to scale horizontally
+- Proper usage of Go modules, interfaces, and dependency boundaries
 
 ---
 
-## Decisión arquitectónica: Hash Mod N
+## 🏛️ Architecture Overview
 
-El sharding se realiza aplicando SHA-256 al `username` y haciendo módulo del número de shards:
+Main flow (CreateUser / GetUser):
+
+Client → Handler → Service → Router → Shard → Database
+
+Each layer has a single responsibility:
+
+- **Handler**: HTTP layer (JSON ↔ domain)
+- **Service**: business logic
+- **Router**: selects the correct shard
+- **Shard**: executes SQL
+- **Database**: persists user data
+- **Models**: pure data structures
+
+---
+
+## Architectural Decision: Hash Mod N
+
+Sharding is implemented by applying SHA-256 to the username and taking the modulo of the number of shards:
 
 shardIndex = hash(username)[0] % numShards
 
-Esto asegura que el mismo usuario siempre cae en el mismo shard.
+This guarantees that the same username always maps to the same shard.
 
 ---
 
-## Limitaciones
+## ⚠️ Limitations
 
-Este método de sharding **NO es escalable en producción** porque:
+This sharding method is **NOT scalable for production environments**, because:
 
-- Cambiar el número de shards hace que todos los usuarios cambien de shard.
-- No hay redistribución controlada.
-- No existen réplicas ni tolerancia a fallos.
-- No permite balanceo dinámico.
+- Changing the number of shards causes all users to map to different shards.
+- No controlled redistribution of data.
+- No replicas or fault tolerance.
+- No dynamic load balancing.
 
-Este proyecto es un ejemplo educativo, no una implementación productiva.
+This project is an educational example, **not** a production-ready implementation.
 
 ---
 
-## Ejecución
+## ▶️ Running the System
 
-1. Levantar los shards:
+1. Start the shards:
 
 ```bash
 docker compose up -d
 ```
 
-2. Ejecutar el servidor:
+2. Run the server:
 
 ```bash
 go run cmd/server/main.go
 ```
 
-3. Crear usuario:
+3. Create a user:
 
 ```bash
 curl -X POST http://localhost:8080/create-user
 
 -H "Content-Type: application/json"
--d '{"user":"usuario","password":"1234"}'
+-d '{"user":"user-test","password":"1234"}'
 ```
 
-4. Consultar usuario:
+4. Fetch a user:
 
 ```bash
-curl "http://localhost:8080/get-user?user=usuario"
+curl "http://localhost:8080/get-user?user=user-test"
 ```
 
 ---
 
-## Objetivo educativo
+## Educational Purpose
 
-Este proyecto forma parte de un portafolio orientado a demostrar:
+This project is part of a portfolio designed to demonstrate:
 
-- Habilidades de arquitectura de software
-- Conocimiento de sistemas distribuidos
-- Dominio de patrones avanzados
-- Claridad en diseño y documentación
+- Software architecture skills
+
+- Understanding of distributed systems
+
+- Knowledge of real-world architectural patterns
+
+- Ability to document and communicate system design effectively

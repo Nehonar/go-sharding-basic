@@ -13,7 +13,7 @@ This project showcases:
 
 ---
 
-## 🏛️ Architecture Overview
+## Architecture Overview
 
 Main flow (CreateUser / GetUser):
 
@@ -40,7 +40,7 @@ This guarantees that the same username always maps to the same shard.
 
 ---
 
-## ⚠️ Limitations
+## Limitations
 
 This sharding method is **NOT scalable for production environments**, because:
 
@@ -53,7 +53,7 @@ This project is an educational example, **not** a production-ready implementatio
 
 ---
 
-## ▶️ Running the System
+## Running the System
 
 1. Start the shards:
 

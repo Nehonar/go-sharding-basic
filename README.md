@@ -179,7 +179,7 @@ The system provides user creation and retrieval through a sharded PostgreSQL bac
 
 ---
 
-## 🧩 C4 Model — Level 2: Container Diagram
+## C4 Model — Level 2: Container Diagram
 
 This level details the internal structure of the Sharded User Service.
 
